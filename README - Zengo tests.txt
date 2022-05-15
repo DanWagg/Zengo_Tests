@@ -16,13 +16,13 @@ This test Scenario included the following:
 	- Home Page backgrounds.
 	- Scroll down to Home Page elementor swiper.
 
-- Selecting Ethereum from Assets drop down and verify the is Ethereum option.
+- Selecting Ethereum from Assets drop down and verify there is Ethereum option.
 
 - Verification of Ethereum Wallet:
 	- Ethereum heading.
 	- Ethereum logo.
-	- Verify Ethereum Wallet URL.
-	- Verify ZenGo logos.
+	- Ethereum Wallet URL.
+	- ZenGo logos.
 
 - Redirecting to home page and verify it again.
 
