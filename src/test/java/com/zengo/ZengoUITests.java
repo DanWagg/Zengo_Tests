@@ -13,83 +13,97 @@ public class ZengoUITests {
 
     @Test
     public void uiTests(){
-        System.out.println("Starting Zengo tests");
 
-        //Create a driver
+        System.out.println("Starting the tests");
         System.setProperty("webdriver.chrome.driver","src/main/resources/chromedriver.exe");
         WebDriver driver = new ChromeDriver();
-
-        //Maximize browser window
-        //When not maximized, the right menu "hamburger" is displayed.
-        //When actually testing, not in the assignment, I Would suggest to test the following as well:
-        // 1. In smaller size window.
-        // 2. By clicking on Assets-> navigate to Ethereum and click.
         driver.manage().window().maximize();
-        System.out.println("browser is opened");
+        System.out.println("The browser is opened");
 
         //Open test page
         String urlZengoMain = "https://zengo.com/";
         driver.get(urlZengoMain);
-        System.out.println("The page is opened");
+        System.out.println("Home page is opened");
 
-        homePageVerification(urlZengoMain, driver);
+        homePageVerifications(urlZengoMain, driver);
 
         //Open drop down from Assets
         Actions actions = new Actions (driver);
         WebElement menuAssetsButton = driver.findElement(By.linkText("Assets"));
         actions.moveToElement(menuAssetsButton).perform();
 
-        //Click on Ethereum
-        //Verification - if not presented the test will fail
+        //drop down - Click on Ethereum
         WebElement ethereumButton = driver.findElement(By.xpath("//li[@class='menu-item menu-item-type-post_type menu-item-object-asset zengo-menu-item menu-item-13963']"));
-        Assert.assertTrue(ethereumButton.isDisplayed(),"Ethereum is not presented");
+        Assert.assertTrue(ethereumButton.isDisplayed(),"Ethereum is not displayed");
         ethereumButton.click();
 
-        //Verify Ethereum wallet heading ***more??**
-        WebElement ethereumHeading = driver.findElement(By.xpath("//h1[@class='elementor-heading-title elementor-size-default']"));
-        Assert.assertTrue(ethereumHeading.isDisplayed(),"Ethereum heading is not presented");
+        ethereumWalletVerifications(driver);
 
-        //Verify that you were redirected to https://zengo.com/assets/ethereum-wallet/
+        //Redirecting to Home Page and verify
+        driver.get(urlZengoMain);
+        homePageVerifications(urlZengoMain, driver);
+        System.out.println("Home page is opened");
+
+        driver.quit();
+        System.out.println("The browser is closed");
+    }
+
+    private void ethereumWalletVerifications(WebDriver driver) {
+
+        //Verify Ethereum heading
+        WebElement ethereumHeading = driver.findElement(By.xpath("//h1[@class='elementor-heading-title elementor-size-default']"));
+        Assert.assertTrue(ethereumHeading.isDisplayed(),"Ethereum heading is not displayed");
+
+        //Verify Ethereum logo
+        WebElement ethereumLogo = driver.findElement(By.xpath("//img[@alt='Ethereum-wallet']"));
+        Assert.assertTrue(ethereumLogo.isDisplayed(),"Ethereum Logo is not displayed");
+
+        //Verify Ethereum Wallet URL
         String expectedUrlEthereumWallet = "https://zengo.com/assets/ethereum-wallet/";
         String actualUrlEthereumWallet = driver.getCurrentUrl();
-        Assert.assertEquals(actualUrlEthereumWallet,expectedUrlEthereumWallet, "This URL is not Zengo's Ethereum Wallet" );
+        Assert.assertEquals(actualUrlEthereumWallet,expectedUrlEthereumWallet, "This URL is not Zengo's Ethereum Wallet");
 
-        //Verify that ZenGo logo is displayed successfully - Above logo
-        WebElement zenGoLogoUp = driver.findElement(By.xpath("//*[@id=\"page\"]/div[1]/header/div[1]/p[1]/a/img"));
+        //Verify ZenGo Above logo displayed
+        WebElement zenGoLogoUp = driver.findElement(By.cssSelector("img[src='//zengo.com/wp-content/themes/zengo/svg/zengologo.svg']"));
         Assert.assertTrue(zenGoLogoUp.isDisplayed(),"The above ZenGo logo is not displayed");
 
-        //ZenGo - Bottom logo
-        //Scroll down till the bottom of the page
+        //ZenGo Bottom logo - Scroll down
         JavascriptExecutor js = (JavascriptExecutor) driver;
         js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
         WebElement zenGoLogoDown = driver.findElement(By.xpath("//footer[@id='colophon']"));
         Assert.assertTrue(zenGoLogoDown.isDisplayed()," The bottom ZenGo logo is not displayed");
-
-        //click on Home page logo
-        zenGoLogoUp.click();
-
-        //Verify again that I am in the home page
-        homePageVerification(urlZengoMain, driver);
-
-        //close driver
-        driver.quit();
-        System.out.println("The page is closed");
     }
 
-    private void homePageVerification(String urlZengoMain,WebDriver driver) {
-        //Verifications
+    private void homePageVerifications(String urlZengoMain,WebDriver driver) {
 
-        //Verify correct URL
-        String expectedUrlZengoMain = urlZengoMain;
+        //Verify Home Page URL
         String actualUrlZengoMain = driver.getCurrentUrl();
-        Assert.assertEquals(actualUrlZengoMain,expectedUrlZengoMain, "This URL is not Zengo's main page" );
+        Assert.assertEquals(actualUrlZengoMain, urlZengoMain, "This URL is not Zengo's main page" );
 
-        //Verify that the site is displayed successfully ->all below
-
-        //Main page heading title
+        //Verify Home Page heading title
         WebElement mainHeadingTitle = driver.findElement(By.xpath("//h1[@class='elementor-heading-title elementor-size-default']"));
-        Assert.assertTrue(mainHeadingTitle.isDisplayed(),"The main page heading title is not visible");
+        Assert.assertTrue(mainHeadingTitle.isDisplayed(),"The main page heading title is not displayed");
 
-        //another image element? more core varifications such as menu from right, zengo logo, QR? chat?
+        //Verify Home Page Scan QR Code title
+        WebElement mainScanQrHeading = driver.findElement(By.xpath("//h2[@class='elementor-heading-title elementor-size-default']"));
+        Assert.assertTrue(mainScanQrHeading.isDisplayed(),"The main page Scan QR Code heading is not displayed");
+
+        //Verify Home Page QR image
+        WebElement mainQrImage = driver.findElement(By.xpath("//img[@alt='Frame(1)']"));
+        Assert.assertTrue(mainQrImage.isDisplayed(),"The main page QR image is not displayed");
+
+        //Verify Home Page background two men and tree
+        WebElement MenAndTree = driver.findElement(By.xpath("//div[@class='elementor-widget-wrap']"));
+        Assert.assertTrue(MenAndTree.isDisplayed(),"The main page background of two men and tree is not displayed");
+
+        //Verify Home Page background sleeping cat and smartphone image
+        WebElement mainCatAndSmartphone = driver.findElement(By.xpath("//img[@alt='Cat and mokcup(3)(1)']"));
+        Assert.assertTrue(mainCatAndSmartphone.isDisplayed(),"The main page sleeping cat and smartphone image is not displayed");
+
+        //Scroll down to Home Page elementor swiper
+        JavascriptExecutor js = (JavascriptExecutor) driver;
+        js.executeScript("window.scrollBy(0,document.body.scrollHeight)");
+        WebElement mainElementorSwiper = driver.findElement(By.xpath("//div[@class='elementor-section-wrap']"));
+        Assert.assertTrue(mainElementorSwiper.isDisplayed(),"The main page elementor swiper is not displayed");
     }
 }
